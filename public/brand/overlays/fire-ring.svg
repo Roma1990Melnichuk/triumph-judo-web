@@ -1,0 +1,11 @@
+<svg width="720" height="720" viewBox="0 0 720 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="g" cx="50%" cy="50%" r="50%"><stop offset="62%" stop-color="#FFCC00" stop-opacity="0"/><stop offset="74%" stop-color="#FFB000" stop-opacity="0.35"/><stop offset="84%" stop-color="#FF3D00" stop-opacity="0.9"/><stop offset="100%" stop-color="#B00000" stop-opacity="0"/></radialGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<circle cx="360" cy="360" r="250" stroke="#FF3D00" stroke-width="5" opacity=".55"/>
+<circle cx="360" cy="360" r="268" stroke="#FFB000" stroke-width="2" opacity=".7" stroke-dasharray="90 26 12 18"/>
+<path d="M123 402C95 256 222 122 383 105c127-14 232 61 253 168" stroke="#FF5A00" stroke-width="10" stroke-linecap="round" opacity=".9" filter="url(#blur)"/>
+<path d="M604 315c36 122-48 263-198 299-118 28-240-10-299-111" stroke="#FFC400" stroke-width="6" stroke-linecap="round" opacity=".75" filter="url(#blur)"/>
+<circle cx="360" cy="360" r="285" fill="url(#g)" opacity=".55"/>
+</svg>

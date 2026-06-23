@@ -3,14 +3,16 @@ import { cn } from '@/lib/utils'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   glow?: boolean
+  tatami?: boolean
 }
 
-export function Card({ className, glow, ...props }: CardProps) {
+export function Card({ className, glow, tatami, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        'bg-[#120605] border border-[#2A1410] rounded-2xl overflow-hidden',
-        glow && 'shadow-[0_0_20px_rgba(213,0,0,0.08)]',
+        'tr-card overflow-hidden',
+        tatami && 'tr-tatami',
+        glow && 'shadow-[0_0_28px_rgba(255,61,0,.12)]',
         className
       )}
       {...props}
@@ -27,5 +29,5 @@ export function CardContent({ className, ...props }: HTMLAttributes<HTMLDivEleme
 }
 
 export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn('text-base font-bold text-[#F7F5F2]', className)} {...props} />
+  return <h3 className={cn('text-base font-display font-bold text-white', className)} {...props} />
 }

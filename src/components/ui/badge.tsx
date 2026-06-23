@@ -7,12 +7,12 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 
 export function Badge({ variant = 'default', className, ...props }: BadgeProps) {
   const variants = {
-    default: 'bg-[#2A1410] text-[#B7B0A8]',
-    success: 'bg-[#63D728]/15 text-[#63D728]',
-    error:   'bg-[#FF3B30]/15 text-[#FF3B30]',
-    warning: 'bg-[#FF8A00]/15 text-[#FF8A00]',
-    gold:    'bg-[#FFD21A]/15 text-[#FFD21A]',
-    red:     'bg-[#D50000]/15 text-[#D50000]',
+    default: 'bg-white/[.08] text-white/60',
+    success: 'bg-[#19C45A]/15 text-[#19C45A]',
+    error:   'bg-[#FF3D00]/15 text-[#FF3D00]',
+    warning: 'bg-[#FF9800]/15 text-[#FF9800]',
+    gold:    'bg-[#FFCC00]/15 text-[#FFCC00]',
+    red:     'bg-[#D50000]/15 text-[#FF3D00]',
   }
   return (
     <span

@@ -14,20 +14,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    if (!loading && !userModel) {
-      router.push('/auth')
-    }
+    if (!loading && !userModel) router.push('/auth')
   }, [loading, userModel, router])
 
   if (loading) return <FullPageSpinner />
   if (!userModel) return null
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#030303]">
-      {/* Mobile overlay */}
+    <div className="flex h-screen overflow-hidden tr-tatami" style={{ backgroundColor: '#050505' }}>
+      {/* Mobile backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 z-40 lg:hidden backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -42,7 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sidebar onClose={() => setMobileOpen(false)} />
       </div>
 
-      {/* Main content */}
+      {/* Main */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header onMenuClick={() => setMobileOpen(o => !o)} />
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">

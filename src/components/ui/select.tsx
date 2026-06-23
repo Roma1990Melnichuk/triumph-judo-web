@@ -8,20 +8,25 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(({ label, error, className, children, ...props }, ref) => (
   <div className="w-full">
-    {label && <label className="block text-sm text-[#B7B0A8] mb-1.5">{label}</label>}
+    {label && (
+      <label className="block text-[11px] font-semibold text-white/50 mb-1.5 uppercase tracking-wide">
+        {label}
+      </label>
+    )}
     <select
       ref={ref}
       className={cn(
-        'w-full h-10 px-3 bg-[#1B0A08] border border-[#2A1410] rounded-xl text-[#F7F5F2] text-sm',
-        'focus:outline-none focus:border-[#FFD21A] transition-colors appearance-none cursor-pointer',
-        error && 'border-[#FF3B30]',
+        'w-full h-10 px-3.5 bg-white/[.06] border border-white/10 rounded-[14px]',
+        'text-white text-sm focus:outline-none focus:border-[#FF3D00]/60 focus:bg-white/[.08]',
+        'transition-all appearance-none cursor-pointer',
+        error && 'border-[#FF3D00]/70',
         className
       )}
       {...props}
     >
       {children}
     </select>
-    {error && <p className="mt-1 text-xs text-[#FF3B30]">{error}</p>}
+    {error && <p className="mt-1 text-xs text-[#FF3D00]">{error}</p>}
   </div>
 ))
 Select.displayName = 'Select'

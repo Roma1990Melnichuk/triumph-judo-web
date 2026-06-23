@@ -1,41 +1,97 @@
 @import "tailwindcss";
 
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --bg: #030303;
-  --surface: #120605;
-  --surface2: #1B0A08;
-  --surface3: #2A1410;
-  --primary: #D50000;
-  --accent: #FFD21A;
-  --text1: #F7F5F2;
-  --text2: #B7B0A8;
-  --text3: #746E68;
-  --success: #63D728;
-  --error: #FF3B30;
+  --tr-bg:       #050505;
+  --tr-surface:  #0B0B0B;
+  --tr-elevated: #120B08;
+  --tr-line:     rgba(255,255,255,0.10);
+  --tr-red:      #D50000;
+  --tr-orange:   #FF3D00;
+  --tr-amber:    #FF9800;
+  --tr-yellow:   #FFCC00;
+  --tr-text:     #FFFFFF;
+  --tr-muted:    #A7A7A7;
+  --tr-success:  #19C45A;
+  --tr-brand:    linear-gradient(90deg, #D50000 0%, #FF3D00 42%, #FF9800 78%, #FFCC00 100%);
+  --tr-glow:     0 0 38px rgba(255,61,0,.35);
+  --tr-shadow:   0 16px 40px rgba(0,0,0,.55);
+  --tr-r-card:   18px;
+  --tr-r-btn:    14px;
 }
 
-* { box-sizing: border-box; }
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: #030303;
-  color: #F7F5F2;
-  font-family: Inter, system-ui, sans-serif;
-  min-height: 100vh;
+  background: var(--tr-bg);
+  color: var(--tr-text);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #120605; }
-::-webkit-scrollbar-thumb { background: #2A1410; border-radius: 2px; }
+/* ── Glass card ─────────────────────────────────────────────────────────────── */
+.tr-card {
+  background: linear-gradient(160deg, rgba(255,255,255,.048), rgba(255,255,255,.014));
+  border: 1px solid var(--tr-line);
+  border-radius: var(--tr-r-card);
+  box-shadow: var(--tr-shadow);
+  backdrop-filter: blur(2px);
+}
 
-.belt-white        { background: #F5F5F5; color: #000; }
-.belt-whiteYellow  { background: linear-gradient(90deg,#F5F5F5 50%,#FFD600 50%); color: #000; }
-.belt-yellow       { background: #FFD600; color: #000; }
-.belt-yellowOrange { background: linear-gradient(90deg,#FFD600 50%,#FF6D00 50%); color: #000; }
-.belt-orange       { background: #FF6D00; color: #000; }
-.belt-orangeGreen  { background: linear-gradient(90deg,#FF6D00 50%,#2E7D32 50%); color: #fff; }
-.belt-green        { background: #2E7D32; color: #fff; }
-.belt-greenBlue    { background: linear-gradient(90deg,#2E7D32 50%,#1565C0 50%); color: #fff; }
+/* ── Brand gradient text ────────────────────────────────────────────────────── */
+.tr-gradient-text {
+  background: var(--tr-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Brand gradient button ──────────────────────────────────────────────────── */
+.tr-btn-brand {
+  background: var(--tr-brand);
+  border-radius: var(--tr-r-btn);
+  box-shadow: var(--tr-glow);
+  color: #0a0a0a;
+  font-weight: 700;
+  transition: opacity .15s, transform .15s, box-shadow .15s;
+}
+.tr-btn-brand:hover  { opacity: .92; transform: translateY(-1px); box-shadow: 0 0 52px rgba(255,61,0,.5); }
+.tr-btn-brand:active { transform: translateY(0); }
+
+/* ── Surface glow bg ────────────────────────────────────────────────────────── */
+.tr-glow-bg {
+  background:
+    radial-gradient(circle at 72% 42%, rgba(255,61,0,.18), transparent 36%),
+    linear-gradient(180deg, var(--tr-surface), var(--tr-bg));
+}
+
+/* ── Tatami texture ─────────────────────────────────────────────────────────── */
+.tr-tatami {
+  background-image: url('/brand/patterns/tatami-pattern.svg');
+  background-size: 96px 96px;
+  background-repeat: repeat;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.10); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.20); }
+
+/* ── Belt classes ───────────────────────────────────────────────────────────── */
+.belt-white        { background: #F5F5F5; color: #111; }
+.belt-whiteYellow  { background: linear-gradient(90deg,#F5F5F5 50%,#FFCC00 50%); color: #111; }
+.belt-yellow       { background: #FFCC00; color: #111; }
+.belt-yellowOrange { background: linear-gradient(90deg,#FFCC00 50%,#FF9800 50%); color: #111; }
+.belt-orange       { background: #FF9800; color: #111; }
+.belt-orangeGreen  { background: linear-gradient(90deg,#FF9800 50%,#4CAF50 50%); color: #111; }
+.belt-green        { background: #4CAF50; color: #111; }
+.belt-greenBlue    { background: linear-gradient(90deg,#4CAF50 50%,#1565C0 50%); color: #fff; }
 .belt-blue         { background: #1565C0; color: #fff; }
-.belt-blueBrown    { background: linear-gradient(90deg,#1565C0 50%,#4E342E 50%); color: #fff; }
-.belt-brown        { background: #4E342E; color: #fff; }
-.belt-black        { background: #212121; color: #fff; }
+.belt-blueBrown    { background: linear-gradient(90deg,#1565C0 50%,#795548 50%); color: #fff; }
+.belt-brown        { background: #795548; color: #fff; }
+.belt-black        { background: #111; color: #fff; border: 1px solid rgba(255,255,255,.18); }

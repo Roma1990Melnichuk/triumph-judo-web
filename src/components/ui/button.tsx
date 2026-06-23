@@ -16,18 +16,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   ...props
 }, ref) => {
-  const base = 'inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#030303]'
+  const base = 'inline-flex items-center justify-center gap-2 font-bold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none select-none'
+
   const variants = {
-    primary:   'bg-cta-gradient text-black hover:opacity-90 focus:ring-[#FFD21A]',
-    secondary: 'bg-[#1B0A08] border border-[#2A1410] text-[#F7F5F2] hover:bg-[#2A1410] focus:ring-[#2A1410]',
-    ghost:     'text-[#B7B0A8] hover:text-[#F7F5F2] hover:bg-[#1B0A08] focus:ring-[#2A1410]',
-    danger:    'bg-[#FF3B30] text-white hover:bg-[#cc2f25] focus:ring-[#FF3B30]',
-    outline:   'border border-[#FFD21A] text-[#FFD21A] hover:bg-[#FFD21A]/10 focus:ring-[#FFD21A]',
+    primary:   'tr-btn-brand text-black rounded-[14px]',
+    secondary: 'bg-white/[.06] border border-white/10 text-white hover:bg-white/10 rounded-[14px]',
+    ghost:     'text-white/50 hover:text-white hover:bg-white/[.06] rounded-[14px]',
+    danger:    'bg-[#FF3D00] text-white hover:bg-[#cc3200] rounded-[14px] shadow-glow',
+    outline:   'border border-[#FF9800] text-[#FF9800] hover:bg-[#FF9800]/10 rounded-[14px]',
   }
   const sizes = {
     sm: 'h-8 px-3 text-xs',
-    md: 'h-10 px-4 text-sm',
-    lg: 'h-12 px-6 text-base',
+    md: 'h-10 px-5 text-sm',
+    lg: 'h-12 px-7 text-base',
   }
   return (
     <button

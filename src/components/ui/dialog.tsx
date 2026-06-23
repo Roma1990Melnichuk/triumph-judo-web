@@ -24,13 +24,16 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className={cn('relative z-10 w-full max-w-md bg-[#120605] border border-[#2A1410] rounded-2xl shadow-2xl', className)}>
+      <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={onClose} />
+      <div className={cn(
+        'relative z-10 w-full max-w-md tr-card shadow-2xl shadow-black/70',
+        className
+      )}>
         {title && (
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[#2A1410]">
-            <h2 className="text-base font-bold text-[#F7F5F2]">{title}</h2>
-            <button onClick={onClose} className="text-[#746E68] hover:text-[#F7F5F2] transition-colors">
-              <X size={18} />
+          <div className="flex items-center justify-between px-5 py-4 border-b border-white/[.07]">
+            <h2 className="text-[15px] font-display font-bold text-white">{title}</h2>
+            <button onClick={onClose} className="text-white/30 hover:text-white transition-colors p-0.5 rounded-lg hover:bg-white/[.06]">
+              <X size={17} />
             </button>
           </div>
         )}
