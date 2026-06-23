@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth-context'
 import { Sidebar } from '@/components/layout/sidebar'
 import { Header } from '@/components/layout/header'
+import { BottomNav } from '@/components/layout/bottom-nav'
 import { FullPageSpinner } from '@/components/ui/spinner'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -21,11 +22,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!userModel) return null
 
   return (
-    <div className="flex h-screen overflow-hidden tr-tatami" style={{ backgroundColor: '#050505' }}>
-      {/* Mobile backdrop */}
+    <div className="flex h-screen overflow-hidden tr-tatami" style={{ backgroundColor: '#080808' }}>
+      {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/70 z-40 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-black/75 z-40 lg:hidden backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -35,18 +36,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
       </div>
 
-      {/* Mobile sidebar */}
+      {/* Mobile drawer sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 lg:hidden transition-transform duration-200 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <Sidebar onClose={() => setMobileOpen(false)} />
       </div>
 
-      {/* Main */}
+      {/* Main content */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header onMenuClick={() => setMobileOpen(o => !o)} />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        {/* pb-20 on mobile = space for bottom nav */}
+        <main className="flex-1 overflow-y-auto p-4 pb-24 lg:p-6 lg:pb-6">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom navigation */}
+      <BottomNav />
     </div>
   )
 }

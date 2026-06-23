@@ -34,136 +34,128 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#050505] flex">
-      {/* ── Hero background ───────────────────────────────────────── */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/brand/hero/hero-judo-fire.webp"
-          alt="Тріумф Дзюдо"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-        {/* Left-to-right fade: text readable on left, form on right */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.92)_0%,rgba(5,5,5,0.82)_38%,rgba(5,5,5,0.50)_64%,rgba(5,5,5,0.80)_100%)]" />
-      </div>
+    <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center px-4 py-12"
+      style={{ background: '#080808' }}>
 
-      {/* ── Energy lines overlay ───────────────────────────────────── */}
-      <div className="absolute inset-x-0 bottom-0 z-0 pointer-events-none opacity-50">
+      {/* Energy lines SVG overlay */}
+      <div className="absolute inset-x-0 bottom-0 pointer-events-none opacity-30 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/overlays/energy-lines.svg" alt="" className="w-full" />
       </div>
 
-      {/* ── Sparks overlay ────────────────────────────────────────── */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-30 mix-blend-screen">
-        <Image src="/brand/overlays/sparks-overlay.webp" alt="" fill className="object-cover" />
-      </div>
+      {/* Radial glow */}
+      <div className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(227,6,19,.12) 0%, transparent 60%)' }} />
 
-      {/* ── Left column: branding ─────────────────────────────────── */}
-      <div className="relative z-10 hidden lg:flex flex-col justify-between p-12 w-[55%]">
-        <div className="flex items-center gap-4">
-          <Image src="/brand/triumph-logo.png" alt="ТРІУМФ" width={72} height={72} className="rounded-2xl" />
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
+
+        {/* Logo + Fire ring decoration */}
+        <div className="relative mb-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/overlays/fire-ring.svg"
+            alt=""
+            className="absolute -inset-6 opacity-60 pointer-events-none"
+            aria-hidden="true"
+          />
+          <Image
+            src="/brand/triumph-logo.png"
+            alt="ТРІУМФ"
+            width={80}
+            height={80}
+            className="rounded-2xl relative z-10"
+            priority
+          />
         </div>
 
-        <div>
-          <h1 className="font-display text-[72px] font-black leading-[1.0] tracking-tight text-white">
-            ТРІУМФ
-          </h1>
-          <p className="mt-4 text-[28px] font-display font-bold leading-tight uppercase text-white/90">
-            Дзюдо починається<br />
-            <span className="tr-gradient-text">з перемоги над собою</span>
-          </p>
+        {/* Club name */}
+        <h1 className="font-display text-3xl font-black text-white tracking-tight mb-1">
+          ТРІУМФ
+        </h1>
+        <p className="text-xs text-[#9A9692] uppercase tracking-widest mb-8">
+          Дзюдо · Самбо · Київ
+        </p>
 
-          {/* Stats row */}
-          <div className="mt-10 flex gap-8">
-            {[
-              { value: '247', label: 'спортсменів\nу клубі' },
-              { value: '18',  label: 'тренерів\nпрофесіоналів' },
-              { value: '1540', label: 'рейтинг клубу\nсередній бал' },
-              { value: '137', label: 'досягнень\n' },
-            ].map(s => (
-              <div key={s.value}>
-                <p className="text-2xl font-display font-black text-white">{s.value}</p>
-                <p className="text-[11px] text-white/55 whitespace-pre-line leading-tight mt-0.5">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+        {/* Card */}
+        <div className="tr-card w-full p-7">
+          <h2 className="font-display text-lg font-bold text-[#F5F5F5] mb-6 text-center">
+            {resetMode ? 'Відновлення паролю' : 'Вхід до акаунту'}
+          </h2>
 
-      {/* ── Right column: login form ──────────────────────────────── */}
-      <div className="relative z-10 flex flex-col justify-center items-center w-full lg:w-[45%] px-6 py-12">
-        {/* Mobile logo */}
-        <div className="lg:hidden flex flex-col items-center mb-8">
-          <Image src="/brand/triumph-logo.png" alt="ТРІУМФ" width={80} height={80} className="rounded-2xl mb-3" />
-          <h1 className="font-display text-4xl font-black text-white">ТРІУМФ</h1>
-          <p className="text-sm text-white/60 mt-1 text-center uppercase tracking-wide">Дзюдо клуб · Система управління</p>
-        </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Email або телефон"
+                required
+                autoComplete="email"
+                className="w-full h-12 px-4 rounded-[14px] bg-[#1A120F] border border-[#34201A] text-[#F5F5F5] placeholder-[#9A9692] text-sm focus:outline-none focus:border-[#E30613]/50 focus:bg-[#1f1612] transition-all"
+              />
+            </div>
 
-        <div className="w-full max-w-sm">
-          {/* Card */}
-          <div className="tr-card p-8">
-            <h2 className="font-display text-xl font-bold text-white mb-6">
-              {resetMode ? 'Відновлення паролю' : 'Вхід до системи'}
-            </h2>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {!resetMode && (
               <div>
-                <label className="block text-xs font-semibold text-white/60 mb-1.5 uppercase tracking-wide">Email</label>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="coach@triumph.ua"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="Пароль"
                   required
-                  autoComplete="email"
-                  className="w-full h-11 px-4 rounded-[14px] bg-white/[.06] border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#FF3D00]/60 focus:bg-white/[.08] transition-all"
+                  autoComplete="current-password"
+                  className="w-full h-12 px-4 rounded-[14px] bg-[#1A120F] border border-[#34201A] text-[#F5F5F5] placeholder-[#9A9692] text-sm focus:outline-none focus:border-[#E30613]/50 focus:bg-[#1f1612] transition-all"
                 />
               </div>
+            )}
 
-              {!resetMode && (
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 mb-1.5 uppercase tracking-wide">Пароль</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    required
-                    autoComplete="current-password"
-                    className="w-full h-11 px-4 rounded-[14px] bg-white/[.06] border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#FF3D00]/60 focus:bg-white/[.08] transition-all"
-                  />
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="tr-btn-brand w-full h-12 mt-2 text-sm font-bold rounded-[14px] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <svg className="animate-spin size-4" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                  </svg>
-                ) : null}
-                {resetMode ? 'Відправити лист' : 'Увійти →'}
-              </button>
-            </form>
-
+            {/* Primary CTA */}
             <button
-              onClick={() => setResetMode(v => !v)}
-              className="w-full mt-4 text-xs text-white/40 hover:text-white/70 transition-colors text-center"
+              type="submit"
+              disabled={loading}
+              className="tr-btn-brand w-full h-14 mt-2 text-base font-bold disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {resetMode ? '← Повернутись до входу' : 'Забули пароль?'}
+              {loading ? (
+                <svg className="animate-spin size-5" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : null}
+              {resetMode ? 'Відправити лист' : 'Увійти'}
             </button>
-          </div>
+          </form>
 
-          <p className="text-center text-[11px] text-white/25 mt-6">
-            ТРІУМФ · Самбо Дзюдо · Спортивний клуб м. Київ
-          </p>
+          {/* Register button */}
+          {!resetMode && (
+            <button
+              type="button"
+              disabled
+              className="w-full h-12 mt-3 rounded-[16px] border border-[#34201A] text-[#F5F5F5] text-sm font-semibold hover:bg-[#1A120F] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Зареєструватись
+            </button>
+          )}
+
+          {/* Forgot password toggle */}
+          <button
+            onClick={() => setResetMode(v => !v)}
+            className="w-full mt-4 text-xs text-[#9A9692] hover:text-[#F5F5F5] transition-colors text-center"
+          >
+            {resetMode ? '← Повернутись до входу' : 'Забули пароль?'}
+          </button>
         </div>
+
+        {/* Guest link */}
+        <p className="mt-6 text-[11px] text-[#9A9692]">
+          Без акаунту?{' '}
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="text-[#FF6A00] hover:text-[#FFC400] transition-colors font-medium"
+          >
+            Гість
+          </button>
+        </p>
       </div>
     </div>
   )

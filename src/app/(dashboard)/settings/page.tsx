@@ -2,18 +2,68 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth-context'
+import { useChildren } from '@/lib/hooks/useChildren'
+import { useGroups } from '@/lib/hooks/useGroups'
 import { auth } from '@/lib/firebase'
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Avatar } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Moon, Globe, LogOut, Shield, Building2, User, Key, ChevronRight } from 'lucide-react'
+import {
+  Building2,
+  Bell,
+  Globe,
+  CreditCard,
+  Users,
+  HelpCircle,
+  Info,
+  LogOut,
+  ChevronRight,
+  Key,
+  Shield,
+} from 'lucide-react'
 import toast from 'react-hot-toast'
+
+interface SettingRowProps {
+  icon: React.ElementType
+  iconBg: string
+  iconColor: string
+  label: string
+  sublabel?: string
+  onClick?: () => void
+  danger?: boolean
+}
+
+function SettingRow({ icon: Icon, iconBg, iconColor, label, sublabel, onClick, danger }: SettingRowProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1A120F] transition-colors text-left ${danger ? 'rounded-[24px]' : ''}`}
+    >
+      <div
+        className="size-9 rounded-xl flex items-center justify-center shrink-0"
+        style={{ background: iconBg }}
+      >
+        <Icon size={16} color={iconColor} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className={`text-sm font-semibold ${danger ? 'text-[#FF3B30]' : 'text-[#F5F5F5]'}`}>{label}</p>
+        {sublabel && <p className="text-xs text-[#9A9692] mt-0.5">{sublabel}</p>}
+      </div>
+      <ChevronRight size={16} className="text-[#9A9692] shrink-0" />
+    </button>
+  )
+}
 
 export default function SettingsPage() {
   const { userModel, signOut } = useAuth()
+  const isCoach = userModel?.role === 'coach'
+
+  // All hooks unconditionally
+  const { children } = useChildren(isCoach ? userModel?.uid : undefined)
+  const { groups } = useGroups(isCoach ? userModel?.uid : undefined)
+
   const [changingPw, setChangingPw] = useState(false)
   const [pwForm, setPwForm] = useState({ current: '', next: '', confirm: '' })
   const [savingPw, setSavingPw] = useState(false)
@@ -57,169 +107,207 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-4 max-w-lg">
-      <h1 className="text-lg font-bold text-[#F7F5F2]">Налаштування</h1>
+    <div className="space-y-5 max-w-lg">
 
-      {/* Profile */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-sm"><User size={15} /> Профіль</CardTitle>
-        </CardHeader>
-        <CardContent className="pb-5">
-          <div className="flex items-center gap-4 mb-4">
-            <Avatar name={userModel?.name ?? ''} photoUrl={userModel?.photoUrl} size="lg" />
-            <div>
-              <p className="font-bold text-[#F7F5F2]">{userModel?.name}</p>
-              <Badge variant={userModel?.role === 'coach' ? 'red' : 'default'} className="mt-1">
-                {userModel?.role === 'coach' ? 'Тренер' : 'Батьки'}
-              </Badge>
+      {/* Profile hero */}
+      <div className="tr-card p-6 flex flex-col items-center text-center">
+        <Avatar
+          name={userModel?.name ?? ''}
+          photoUrl={userModel?.photoUrl}
+          size="xl"
+          className="mb-3 !size-20 !text-2xl"
+        />
+        <p className="font-bold text-lg text-[#F5F5F5]">{userModel?.name ?? '—'}</p>
+        <span
+          className="mt-1 px-3 py-0.5 rounded-full text-xs font-semibold"
+          style={{
+            background: isCoach ? 'rgba(227,6,19,.18)' : 'rgba(255,106,0,.15)',
+            color: isCoach ? '#E30613' : '#FF6A00',
+          }}
+        >
+          {isCoach ? 'Тренер' : 'Батько/Мати'}
+        </span>
+
+        {/* Coach stats row */}
+        {isCoach && (
+          <div className="flex items-center gap-6 mt-4 pt-4 border-t border-[#34201A] w-full justify-center">
+            <div className="text-center">
+              <p className="text-xl font-display font-black text-[#F5F5F5]">{children.length}</p>
+              <p className="text-[11px] text-[#9A9692]">спортсменів</p>
+            </div>
+            <div className="w-px h-8 bg-[#34201A]" />
+            <div className="text-center">
+              <p className="text-xl font-display font-black text-[#F5F5F5]">{groups.length}</p>
+              <p className="text-[11px] text-[#9A9692]">груп</p>
             </div>
           </div>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between py-2 border-b border-[#2A1410]">
-              <span className="text-sm text-[#B7B0A8]">Email</span>
-              <span className="text-sm text-[#F7F5F2]">{userModel?.email ?? '—'}</span>
-            </div>
-            <div className="flex items-center justify-between py-2 border-b border-[#2A1410]">
-              <span className="text-sm text-[#B7B0A8]">Телефон</span>
-              <span className="text-sm text-[#F7F5F2]">{userModel?.phone ?? 'Не вказано'}</span>
-            </div>
+        )}
+      </div>
+
+      {/* General section */}
+      <div className="tr-card overflow-hidden">
+        <p className="px-4 pt-4 pb-2 text-[11px] font-bold text-[#9A9692] uppercase tracking-wider">Загальне</p>
+        <div className="divide-y divide-[#34201A]">
+          <SettingRow
+            icon={Building2}
+            iconBg="rgba(227,6,19,.15)"
+            iconColor="#E30613"
+            label="Інформація про клуб"
+            sublabel="ТРІУМФ · Дзюдо · Київ"
+          />
+          <SettingRow
+            icon={Bell}
+            iconBg="rgba(255,106,0,.15)"
+            iconColor="#FF6A00"
+            label="Сповіщення"
+            sublabel="Керування повідомленнями"
+          />
+          <SettingRow
+            icon={Globe}
+            iconBg="rgba(41,209,88,.12)"
+            iconColor="#29D158"
+            label="Мова"
+            sublabel="🇺🇦 Українська"
+          />
+        </div>
+      </div>
+
+      {/* Coach-only: Tariffs & Memberships */}
+      {isCoach && (
+        <div className="tr-card overflow-hidden">
+          <p className="px-4 pt-4 pb-2 text-[11px] font-bold text-[#9A9692] uppercase tracking-wider">Фінанси</p>
+          <div className="divide-y divide-[#34201A]">
+            <SettingRow
+              icon={CreditCard}
+              iconBg="rgba(255,196,0,.12)"
+              iconColor="#FFC400"
+              label="Тарифи"
+              sublabel="Налаштування абонементів"
+            />
+            <SettingRow
+              icon={Users}
+              iconBg="rgba(255,196,0,.08)"
+              iconColor="#FFD23F"
+              label="Абонементи"
+              sublabel="Стан оплат спортсменів"
+            />
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Change password */}
-      <Card>
-        <CardContent className="p-5">
-          <button
-            className="w-full flex items-center gap-3"
-            onClick={() => setChangingPw(p => !p)}
-          >
-            <div className="size-9 rounded-xl bg-[#D50000]/10 flex items-center justify-center">
-              <Key size={15} className="text-[#D50000]" />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-semibold text-[#F7F5F2]">Змінити пароль</p>
-              <p className="text-xs text-[#746E68]">Оновлення пароля облікового запису</p>
-            </div>
-            <ChevronRight size={16} className={`text-[#746E68] transition-transform ${changingPw ? 'rotate-90' : ''}`} />
-          </button>
-
-          {changingPw && (
-            <form onSubmit={handleChangePw} className="mt-4 space-y-3">
-              <Input
-                label="Поточний пароль"
-                type="password"
-                value={pwForm.current}
-                onChange={e => setPwForm(f => ({ ...f, current: e.target.value }))}
-                required
-                placeholder="••••••••"
-              />
-              <Input
-                label="Новий пароль"
-                type="password"
-                value={pwForm.next}
-                onChange={e => setPwForm(f => ({ ...f, next: e.target.value }))}
-                required
-                placeholder="••••••••"
-              />
-              <Input
-                label="Підтвердіть новий пароль"
-                type="password"
-                value={pwForm.confirm}
-                onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))}
-                required
-                placeholder="••••••••"
-              />
-              <div className="flex gap-2 justify-end">
-                <Button variant="ghost" type="button" onClick={() => { setChangingPw(false); setPwForm({ current: '', next: '', confirm: '' }) }}>Скасувати</Button>
-                <Button type="submit" loading={savingPw}>Змінити</Button>
-              </div>
-            </form>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Theme info */}
-      <Card>
-        <CardContent className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="size-9 rounded-xl bg-[#1B0A08] flex items-center justify-center">
-              <Moon size={15} className="text-[#B7B0A8]" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-[#F7F5F2]">Темна тема</p>
-              <p className="text-xs text-[#746E68]">Додаток завжди використовує темну тему</p>
-            </div>
-            <Badge variant="default">Завжди</Badge>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Language info */}
-      <Card>
-        <CardContent className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="size-9 rounded-xl bg-[#1B0A08] flex items-center justify-center">
-              <Globe size={15} className="text-[#B7B0A8]" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-[#F7F5F2]">Мова</p>
-              <p className="text-xs text-[#746E68]">Інтерфейс відображається українською мовою</p>
-            </div>
-            <Badge variant="default">🇺🇦 Українська</Badge>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Coach: Club info placeholder */}
-      {userModel?.role === 'coach' && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sm"><Building2 size={15} /> Інформація про клуб</CardTitle>
-          </CardHeader>
-          <CardContent className="pb-5">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between py-2 border-b border-[#2A1410]">
-                <span className="text-sm text-[#B7B0A8]">Назва клубу</span>
-                <span className="text-sm text-[#F7F5F2]">Тріумф</span>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b border-[#2A1410]">
-                <span className="text-sm text-[#B7B0A8]">Вид спорту</span>
-                <span className="text-sm text-[#F7F5F2]">Дзюдо</span>
-              </div>
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-[#B7B0A8]">ID тренера</span>
-                <span className="text-xs text-[#746E68] font-mono">{userModel.uid.slice(0, 8)}...</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        </div>
       )}
 
-      {/* Security */}
-      <Card>
-        <CardContent className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="size-9 rounded-xl bg-[#1B0A08] flex items-center justify-center">
-              <Shield size={15} className="text-[#B7B0A8]" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-[#F7F5F2]">Безпека</p>
-              <p className="text-xs text-[#746E68]">Двофакторна автентифікація недоступна</p>
-            </div>
-            <Badge variant="default">Базова</Badge>
+      {/* Change password (collapsible) */}
+      <div className="tr-card overflow-hidden">
+        <p className="px-4 pt-4 pb-2 text-[11px] font-bold text-[#9A9692] uppercase tracking-wider">Безпека</p>
+        <button
+          type="button"
+          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1A120F] transition-colors"
+          onClick={() => setChangingPw(p => !p)}
+        >
+          <div className="size-9 rounded-xl flex items-center justify-center shrink-0 bg-[rgba(227,6,19,.15)]">
+            <Key size={16} color="#E30613" />
           </div>
-        </CardContent>
-      </Card>
+          <div className="flex-1 text-left">
+            <p className="text-sm font-semibold text-[#F5F5F5]">Змінити пароль</p>
+            <p className="text-xs text-[#9A9692]">Оновлення пароля облікового запису</p>
+          </div>
+          <ChevronRight
+            size={16}
+            className={`text-[#9A9692] shrink-0 transition-transform ${changingPw ? 'rotate-90' : ''}`}
+          />
+        </button>
 
-      {/* Sign out */}
-      <Button variant="danger" className="w-full" onClick={handleSignOut}>
-        <LogOut size={16} className="mr-2" />
-        Вийти з акаунту
-      </Button>
+        {changingPw && (
+          <form onSubmit={handleChangePw} className="px-4 pb-4 space-y-3 border-t border-[#34201A] pt-4">
+            <Input
+              label="Поточний пароль"
+              type="password"
+              value={pwForm.current}
+              onChange={e => setPwForm(f => ({ ...f, current: e.target.value }))}
+              required
+              placeholder="••••••••"
+            />
+            <Input
+              label="Новий пароль"
+              type="password"
+              value={pwForm.next}
+              onChange={e => setPwForm(f => ({ ...f, next: e.target.value }))}
+              required
+              placeholder="••••••••"
+            />
+            <Input
+              label="Підтвердіть новий пароль"
+              type="password"
+              value={pwForm.confirm}
+              onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))}
+              required
+              placeholder="••••••••"
+            />
+            <div className="flex gap-2 justify-end">
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={() => {
+                  setChangingPw(false)
+                  setPwForm({ current: '', next: '', confirm: '' })
+                }}
+              >
+                Скасувати
+              </Button>
+              <Button type="submit" loading={savingPw}>Змінити</Button>
+            </div>
+          </form>
+        )}
 
-      <p className="text-center text-xs text-[#2A1410]">Тріумф · Версія 1.0.0</p>
+        <div className="border-t border-[#34201A]">
+          <SettingRow
+            icon={Shield}
+            iconBg="rgba(155,155,155,.10)"
+            iconColor="#9A9692"
+            label="Двофакторна автентифікація"
+            sublabel="Недоступна в поточній версії"
+          />
+        </div>
+      </div>
+
+      {/* Support */}
+      <div className="tr-card overflow-hidden">
+        <p className="px-4 pt-4 pb-2 text-[11px] font-bold text-[#9A9692] uppercase tracking-wider">Підтримка</p>
+        <div className="divide-y divide-[#34201A]">
+          <SettingRow
+            icon={HelpCircle}
+            iconBg="rgba(41,182,246,.12)"
+            iconColor="#29B6F6"
+            label="Допомога"
+            sublabel="FAQ та підтримка"
+          />
+          <SettingRow
+            icon={Info}
+            iconBg="rgba(155,155,155,.10)"
+            iconColor="#9A9692"
+            label="Про додаток"
+            sublabel="Версія 1.0.0 · ТРІУМФ"
+          />
+        </div>
+      </div>
+
+      {/* Danger: Sign out */}
+      <div
+        className="tr-card overflow-hidden border"
+        style={{ borderColor: 'rgba(255,59,48,.25)' }}
+      >
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="w-full flex items-center gap-3 px-4 py-4 hover:bg-[#FF3B30]/10 transition-colors"
+        >
+          <div className="size-9 rounded-xl flex items-center justify-center shrink-0 bg-[rgba(255,59,48,.15)]">
+            <LogOut size={16} color="#FF3B30" />
+          </div>
+          <p className="text-sm font-semibold text-[#FF3B30]">Вийти</p>
+        </button>
+      </div>
+
+      <p className="text-center text-xs text-[#34201A] pb-4">ТРІУМФ · Версія 1.0.0</p>
     </div>
   )
 }
