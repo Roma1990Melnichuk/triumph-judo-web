@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { DAY_NAMES } from '@/lib/constants'
 import { Plus, Users, Flame, CalendarDays, Clock } from 'lucide-react'
+import Link from 'next/link'
 import toast from 'react-hot-toast'
 
 const UA_DAY_SHORT = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд']
@@ -167,11 +168,19 @@ export default function SchedulePage() {
                   <p className="text-xs text-[#9A9692] mt-0.5 flex items-center gap-1">
                     <Clock size={11} /> Залл ТРІУМФ
                   </p>
-                  {/* Athlete count chip */}
-                  <div className="flex items-center gap-1 mt-2">
+                  {/* Athlete count chip + attendance link */}
+                  <div className="flex items-center gap-2 mt-2 flex-wrap">
                     <span className="inline-flex items-center gap-1 bg-[#34201A] rounded-full px-2.5 py-0.5 text-xs text-[#9A9692]">
                       <Users size={11} /> {group.childIds.length} уч.
                     </span>
+                    {isCoach && (
+                      <Link
+                        href={"/schedule/" + group.id}
+                        className="text-xs text-[#FF6A00] hover:text-[#FFC400] transition-colors inline-flex items-center gap-1"
+                      >
+                        Відвідуваність →
+                      </Link>
+                    )}
                   </div>
                 </div>
                 <Flame size={24} className="text-[#FF6A00] shrink-0 mt-0.5" />

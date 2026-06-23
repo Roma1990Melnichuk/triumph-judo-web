@@ -10,6 +10,7 @@ import {
   Users, Award, Calendar, Utensils, Trophy, Home,
   Settings, Bell, ShoppingBag, CreditCard, Dumbbell,
   FileText, BarChart2, LogOut, ChevronLeft, Zap, BookOpen, Star,
+  MessageSquare, Clock,
 } from 'lucide-react'
 
 interface NavItem {
@@ -29,8 +30,11 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/competitions',    label: 'Змагання',       icon: Trophy },
   { href: '/fitness',         label: 'Фізпідготовка',  icon: Dumbbell },
   { href: '/rating',          label: 'Рейтинг',        icon: BarChart2 },
+  { href: '/messages',        label: 'Повідомлення',   icon: MessageSquare },
+  { href: '/slots',           label: 'Слоти',          icon: Clock },
   { href: '/events',          label: 'Події',          icon: Zap },
   { href: '/news',            label: 'Новини',         icon: BookOpen },
+  { href: '/news/honor-board', label: 'Дошка пошани',  icon: Star },
   { href: '/membership',      label: 'Членство',       icon: CreditCard, coachOnly: true },
   { href: '/shop',            label: 'Магазин',        icon: ShoppingBag },
   { href: '/questionnaires',  label: 'Анкети',         icon: FileText,   coachOnly: true },
