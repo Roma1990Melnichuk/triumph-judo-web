@@ -140,6 +140,82 @@ export const MEAL_TYPE_LABEL: Record<string, string> = {
   supper: 'Полудень', dinner: 'Вечеря',
 }
 
+// ── Loyalty / XP ─────────────────────────────────────────────────────────────
+import type { LoyaltyLevel, XpSource, RewardCategory } from './types'
+
+export const LOYALTY_LEVELS: Record<LoyaltyLevel, { label: string; color: string; minXp: number; maxXp: number | null; emoji: string }> = {
+  bronze:   { label: 'Бронза',   color: '#CD7F32', minXp: 0,     maxXp: 999,   emoji: '🥉' },
+  silver:   { label: 'Срібло',   color: '#A8B4C0', minXp: 1000,  maxXp: 2999,  emoji: '🥈' },
+  gold:     { label: 'Золото',   color: '#FFD21A', minXp: 3000,  maxXp: 9999,  emoji: '🥇' },
+  champion: { label: 'Чемпіон', color: '#FF3B30', minXp: 10000, maxXp: null,  emoji: '👑' },
+}
+
+export const XP_SOURCE_LABEL: Record<XpSource, string> = {
+  attendance:      'Тренування',
+  streak_bonus:    'Серія',
+  exercise:        'Вправи',
+  nutrition:       'Харчування',
+  competition:     'Змагання',
+  belt_attestation:'Атестація',
+  manual:          'Ручне',
+  challenge:       'Виклик',
+  reward_spend:    'Витрата',
+}
+
+export const XP_SOURCE_ICON: Record<XpSource, string> = {
+  attendance:      '🥋',
+  streak_bonus:    '🔥',
+  exercise:        '💪',
+  nutrition:       '🥗',
+  competition:     '🏆',
+  belt_attestation:'🎽',
+  manual:          '✍️',
+  challenge:       '🎯',
+  reward_spend:    '🎁',
+}
+
+export const XP_VALUES = {
+  attendance: 10,
+  attendance_no_late: 5,
+  streak_week: 50,
+  streak_month: 200,
+  exercise_easy: 5,
+  exercise_medium: 15,
+  exercise_hard: 30,
+  exercise_excellent: 50,
+  nutrition_1day: 10,
+  nutrition_7days: 50,
+  nutrition_30days: 200,
+  competition_participate: 300,
+  competition_bronze: 500,
+  competition_silver: 700,
+  competition_gold: 1000,
+} as const
+
+export const REWARD_CATEGORY_LABEL: Record<RewardCategory, string> = {
+  merch:       'Мерч',
+  services:    'Послуги',
+  masterclass: 'Майстер-класи',
+  tournament:  'Турніри',
+  bonus:       'Бонуси',
+}
+
+export function getLoyaltyLevel(xp: number): LoyaltyLevel {
+  if (xp >= 10000) return 'champion'
+  if (xp >= 3000) return 'gold'
+  if (xp >= 1000) return 'silver'
+  return 'bronze'
+}
+
+export function getLoyaltyProgress(xp: number): { level: LoyaltyLevel; pct: number; current: number; next: number | null } {
+  const level = getLoyaltyLevel(xp)
+  const def = LOYALTY_LEVELS[level]
+  if (def.maxXp === null) return { level, pct: 100, current: xp, next: null }
+  const range = def.maxXp + 1 - def.minXp
+  const pct = Math.min(100, Math.round(((xp - def.minXp) / range) * 100))
+  return { level, pct, current: xp, next: def.maxXp + 1 }
+}
+
 export const WEIGHT_CATEGORIES = [
   '-16 кг','-18 кг','-20 кг','-22 кг','-24 кг','-26 кг','-28 кг',
   '-30 кг','-32 кг','-34 кг','-36 кг','-38 кг','-40 кг','-42 кг',

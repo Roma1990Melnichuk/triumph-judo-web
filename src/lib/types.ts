@@ -378,6 +378,82 @@ export interface HonorBoardEntry {
   coachId: string
 }
 
+// ── Loyalty / XP ─────────────────────────────────────────────────────────────
+export type LoyaltyLevel = 'bronze' | 'silver' | 'gold' | 'champion'
+
+export type XpSource =
+  | 'attendance' | 'streak_bonus' | 'exercise' | 'nutrition'
+  | 'competition' | 'belt_attestation' | 'manual' | 'challenge' | 'reward_spend'
+
+export interface XpTransaction {
+  id: string
+  childId: string
+  coachId?: string
+  amount: number
+  source: XpSource
+  description: string
+  referenceId?: string
+  createdAt: Date
+}
+
+export type RewardCategory = 'merch' | 'services' | 'masterclass' | 'tournament' | 'bonus'
+
+export interface LoyaltyReward {
+  id: string
+  name: string
+  description: string
+  imageUrl?: string
+  category: RewardCategory
+  xpCost: number
+  stock?: number
+  minLevel: LoyaltyLevel
+  isActive: boolean
+  createdAt: Date
+}
+
+export interface RewardOrder {
+  id: string
+  childId: string
+  rewardId: string
+  rewardName: string
+  xpCost: number
+  status: 'pending' | 'approved' | 'rejected' | 'delivered'
+  createdAt: Date
+  processedAt?: Date
+  processedByCoachId?: string
+  note?: string
+}
+
+export type ChallengeMetric =
+  | 'trainings' | 'exercises' | 'nutrition_days' | 'competition_wins'
+  | 'attendance_streak' | 'total_xp' | 'belt_ready'
+
+export interface LoyaltyChallenge {
+  id: string
+  title: string
+  description: string
+  emoji: string
+  type: 'individual' | 'team'
+  targetValue: number
+  metric: ChallengeMetric
+  xpReward: number
+  startDate: Date
+  endDate: Date
+  coachId: string
+  clubId?: string
+  targetChildIds?: string[]
+  isActive: boolean
+}
+
+export interface ChallengeProgress {
+  id: string
+  challengeId: string
+  childId: string
+  currentValue: number
+  completed: boolean
+  completedAt?: Date
+}
+
 // ── Training Session ──────────────────────────────────────────────────────────
 export interface TrainingSession {
   id: string
