@@ -378,6 +378,24 @@ export interface HonorBoardEntry {
   coachId: string
 }
 
+// ── Coach Profile ─────────────────────────────────────────────────────────────
+export interface CoachProfile {
+  uid: string
+  bio: string
+  slogan: string
+  experienceYears: number
+  danLevel: number
+  qualifications: string[]
+  trainerStats: {
+    studentMedals: number
+    nationalPrizes: number
+    totalStudents: number
+    specialTitle?: string
+  }
+  trainingPhotos: string[]
+  updatedAt: Date
+}
+
 // ── Loyalty / XP ─────────────────────────────────────────────────────────────
 export type LoyaltyLevel = 'bronze' | 'silver' | 'gold' | 'champion'
 

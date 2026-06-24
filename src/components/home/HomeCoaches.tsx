@@ -32,14 +32,15 @@ export function HomeCoaches() {
       ) : (
         <div className="space-y-2">
           {coaches.slice(0, 3).map(coach => (
-            <div key={coach.uid}
-                 className="flex items-center gap-3 p-3 rounded-[14px] bg-[#1A120F] border border-[#2A1810] hover:border-[#3A2820] transition-colors">
+            <Link key={coach.uid} href={`/coaches/${coach.uid}`}
+                 className="flex items-center gap-3 p-3 rounded-[14px] bg-[#1A120F] border border-[#2A1810] hover:border-[#3A2820] hover:bg-[#1F1510] transition-colors">
               <Avatar name={coach.name} size="md" />
               <div className="flex-1 min-w-0">
                 <p className="text-[#F5F5F5] text-sm font-semibold truncate">{coach.name}</p>
                 <p className="text-[#9A9692] text-[10px] uppercase tracking-wider mt-0.5">Тренер з дзюдо</p>
               </div>
-            </div>
+              <ChevronRight size={14} className="text-[#9A9692] shrink-0" />
+            </Link>
           ))}
         </div>
       )}

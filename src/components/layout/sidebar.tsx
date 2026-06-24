@@ -10,7 +10,7 @@ import {
   Users, Award, Calendar, Utensils, Trophy, Home,
   Settings, Bell, ShoppingBag, CreditCard, Dumbbell,
   FileText, BarChart2, LogOut, ChevronLeft, Zap, BookOpen, Star,
-  MessageSquare, Clock, Flame,
+  MessageSquare, Clock, Flame, UserCircle,
 } from 'lucide-react'
 
 interface NavItem {
@@ -115,6 +115,28 @@ export function Sidebar({ collapsed, onToggle, onClose }: SidebarProps) {
             </Link>
           )
         })}
+        {isCoach && userModel && (() => {
+          const href = `/coaches/${userModel.uid}`
+          const active = pathname.startsWith(href)
+          return (
+            <Link
+              href={href}
+              onClick={onClose}
+              title={collapsed ? 'Мій профіль' : undefined}
+              className={cn(
+                'flex items-center gap-3 h-9 rounded-xl text-[13px] font-medium transition-all duration-150',
+                collapsed ? 'px-0 justify-center' : 'px-3',
+                active
+                  ? 'bg-[#D50000]/14 text-[#FFCC00]'
+                  : 'text-white/45 hover:text-white/85 hover:bg-white/[.05]'
+              )}
+            >
+              <UserCircle size={15} className={cn('shrink-0', active && 'text-[#FF3D00]')} />
+              {!collapsed && <span className="truncate">Мій профіль</span>}
+              {!collapsed && active && <span className="ml-auto size-1.5 rounded-full bg-[#FF3D00]" />}
+            </Link>
+          )
+        })()}
       </nav>
 
       {/* ── User footer ───────────────────────────── */}
